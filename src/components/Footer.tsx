@@ -23,29 +23,22 @@ const InstagramIcon = () => (
   </svg>
 );
 
-const LinkedinIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
-    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z" />
-    <circle cx="4" cy="4" r="2" />
-  </svg>
-);
-
 const footerLinks = {
   students: [
-    { label: 'Find Rooms', href: '/room-listing-page', key: 'footer-find-rooms' },
-    { label: 'How It Works', href: '/home#how-it-works', key: 'footer-how-it-works' },
-    { label: 'Student Guide', href: '#', key: 'footer-guide' },
-    { label: 'Safety Tips', href: '#', key: 'footer-safety' },
+    { label: 'Find Bedspaces', href: '/room-listing-page', key: 'footer-find' },
+    { label: 'How It Works', href: '/home#how-it-works', key: 'footer-how' },
+    { label: 'Student Guide', href: '/about', key: 'footer-guide' },
+    { label: 'Safety Tips', href: '/about', key: 'footer-safety' },
   ],
   landlords: [
-    { label: 'List Your Property', href: '/sign-up-login-screen', key: 'footer-list' },
-    { label: 'Landlord Dashboard', href: '#', key: 'footer-landlord-dash' },
-    { label: 'Pricing', href: '#', key: 'footer-pricing' },
-    { label: 'Verification Process', href: '#', key: 'footer-verify' },
+    { label: 'List Your Bedspace', href: '/sign-up-login-screen', key: 'footer-list' },
+    { label: 'Provider Dashboard', href: '/landlord-dashboard', key: 'footer-landlord' },
+    { label: 'Verification Process', href: '/about', key: 'footer-verify' },
+    { label: 'Provider FAQ', href: '/contact', key: 'footer-faq' },
   ],
   company: [
-    { label: 'About UniBoard', href: '/home#about', key: 'footer-about' },
-    { label: 'Contact Us', href: '/home#contact', key: 'footer-contact' },
+    { label: 'About UniBoard', href: '/about', key: 'footer-about' },
+    { label: 'Contact Us', href: '/contact', key: 'footer-contact' },
     { label: 'Privacy Policy', href: '#', key: 'footer-privacy' },
     { label: 'Terms of Service', href: '#', key: 'footer-terms' },
   ],
@@ -55,13 +48,11 @@ const socialLinks = [
   { icon: FacebookIcon, href: '#', key: 'social-fb', label: 'Facebook' },
   { icon: TwitterIcon, href: '#', key: 'social-tw', label: 'Twitter' },
   { icon: InstagramIcon, href: '#', key: 'social-ig', label: 'Instagram' },
-  { icon: LinkedinIcon, href: '#', key: 'social-li', label: 'LinkedIn' },
 ];
 
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-300">
-      {/* Main Footer */}
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Brand Column */}
@@ -70,34 +61,36 @@ export default function Footer() {
               <AppLogo size={36} />
               <span className="text-white font-bold text-xl">UniBoard</span>
             </div>
-            <p className="text-sm text-gray-400 leading-relaxed mb-6 max-w-xs">
-              The trusted student accommodation platform connecting thousands of students
-              with verified landlords near universities across the country.
+            <p className="text-sm text-gray-400 leading-relaxed mb-2 max-w-xs">
+              Zambia&apos;s trusted student accommodation marketplace. Connecting students with verified providers near their campus.
             </p>
+            <div className="inline-flex items-center gap-1.5 bg-green-900/40 border border-green-700/40 rounded-full px-3 py-1 mb-5">
+              <div className="w-2 h-2 rounded-full bg-green-400" />
+              <span className="text-xs text-green-400 font-medium">Every provider is verified before approval</span>
+            </div>
             <div className="space-y-2.5">
               <div className="flex items-center gap-2.5 text-sm text-gray-400">
-                <MapPin size={15} className="text-blue-400 flex-shrink-0" />
-                <span>123 University Ave, Cape Town, 8001</span>
+                <MapPin size={15} className="text-green-500 flex-shrink-0" />
+                <span>Cairo Road, Lusaka, Zambia</span>
               </div>
               <div className="flex items-center gap-2.5 text-sm text-gray-400">
-                <Mail size={15} className="text-blue-400 flex-shrink-0" />
-                <span>hello@uniboard.co.za</span>
+                <Mail size={15} className="text-green-500 flex-shrink-0" />
+                <span>hello@uniboard.zm</span>
               </div>
               <div className="flex items-center gap-2.5 text-sm text-gray-400">
-                <Phone size={15} className="text-blue-400 flex-shrink-0" />
-                <span>+27 21 555 0192</span>
+                <Phone size={15} className="text-green-500 flex-shrink-0" />
+                <span>+260 97 000 1234</span>
               </div>
             </div>
-            {/* Social Links */}
             <div className="flex items-center gap-3 mt-6">
               {socialLinks?.map((s) => (
                 <a
                   key={s?.key}
                   href={s?.href}
                   aria-label={s?.label}
-                  className="w-9 h-9 rounded-lg bg-gray-800 hover:bg-blue-600 flex items-center justify-center transition-colors duration-200"
+                  className="w-9 h-9 rounded-lg bg-gray-800 hover:bg-green-700 flex items-center justify-center transition-colors duration-200"
                 >
-                  <s.icon size={16} />
+                  <s.icon />
                 </a>
               ))}
             </div>
@@ -109,10 +102,7 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {footerLinks?.students?.map((link) => (
                 <li key={link?.key}>
-                  <Link
-                    href={link?.href}
-                    className="text-sm text-gray-400 hover:text-blue-400 transition-colors"
-                  >
+                  <Link href={link?.href} className="text-sm text-gray-400 hover:text-green-400 transition-colors">
                     {link?.label}
                   </Link>
                 </li>
@@ -122,14 +112,11 @@ export default function Footer() {
 
           {/* Landlords */}
           <div>
-            <h4 className="text-white font-semibold text-sm mb-4">For Landlords</h4>
+            <h4 className="text-white font-semibold text-sm mb-4">For Providers</h4>
             <ul className="space-y-2.5">
               {footerLinks?.landlords?.map((link) => (
                 <li key={link?.key}>
-                  <Link
-                    href={link?.href}
-                    className="text-sm text-gray-400 hover:text-blue-400 transition-colors"
-                  >
+                  <Link href={link?.href} className="text-sm text-gray-400 hover:text-green-400 transition-colors">
                     {link?.label}
                   </Link>
                 </li>
@@ -143,10 +130,7 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {footerLinks?.company?.map((link) => (
                 <li key={link?.key}>
-                  <Link
-                    href={link?.href}
-                    className="text-sm text-gray-400 hover:text-blue-400 transition-colors"
-                  >
+                  <Link href={link?.href} className="text-sm text-gray-400 hover:text-green-400 transition-colors">
                     {link?.label}
                   </Link>
                 </li>
@@ -155,22 +139,14 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      {/* Bottom Bar */}
       <div className="border-t border-gray-800">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-gray-500">
-            © 2026 UniBoard. All rights reserved. Built for students, by students.
+            © 2026 UniBoard Zambia. All rights reserved. Built for Zambian students.
           </p>
           <div className="flex items-center gap-4">
-            <Link href="#" className="text-xs text-gray-500 hover:text-gray-300 transition-colors">
-              Privacy
-            </Link>
-            <Link href="#" className="text-xs text-gray-500 hover:text-gray-300 transition-colors">
-              Terms
-            </Link>
-            <Link href="#" className="text-xs text-gray-500 hover:text-gray-300 transition-colors">
-              Cookies
-            </Link>
+            <Link href="#" className="text-xs text-gray-500 hover:text-gray-300 transition-colors">Privacy</Link>
+            <Link href="#" className="text-xs text-gray-500 hover:text-gray-300 transition-colors">Terms</Link>
           </div>
         </div>
       </div>

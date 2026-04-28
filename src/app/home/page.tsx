@@ -1,12 +1,17 @@
+'use client';
+
 import React from 'react';
 import Topbar from '@/components/Topbar';
 import Footer from '@/components/Footer';
 import HeroSection from './components/HeroSection';
 import StatsBar from './components/StatsBar';
+import UniversitySection from './components/UniversitySection';
 import FeaturedListings from './components/FeaturedListings';
+import VerifiedProviders from './components/VerifiedProviders';
 import HowItWorks from './components/HowItWorks';
-import Testimonials from './components/Testimonials';
+import TrustBanner from './components/TrustBanner';
 import CtaBanner from './components/CtaBanner';
+import Testimonials from './components/Testimonials';
 
 export default function HomePage() {
   return (
@@ -14,7 +19,10 @@ export default function HomePage() {
       <Topbar />
       <HeroSection />
       <StatsBar />
+      <UniversitySection />
       <FeaturedListings />
+      <TrustBanner />
+      <VerifiedProviders />
       <HowItWorks />
       <Testimonials />
       <CtaBanner />
