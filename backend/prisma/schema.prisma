@@ -1,0 +1,235 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String      @id @default(uuid())
+  fullName      String
+  email         String      @unique
+  password      String
+  role          Role        @default(STUDENT)
+  status        UserStatus  @default(PENDING)
+  adminLevel    AdminLevel?
+  phone         String?
+  phoneVerified Boolean     @default(false)
+  university    String?
+  compoundName  String?
+  avatar        String?
+
+  // FIX: must be optional because user may not upload NRC at signup
+  nrcImages Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  compounds        Compound[]
+  reviews          Review[]
+  otpVerifications OtpVerification[]
+
+  managerAsManager  ManagerAgent[] @relation("ManagedBy")
+  managerAsLandlord ManagerAgent[] @relation("Manages")
+
+  @@map("users")
+}
+
+model University {
+  id       String @id @default(uuid())
+  name     String
+  fullName String
+  city     String
+  color    String
+
+  properties Property[]
+
+  @@map("universities")
+}
+
+model Compound {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  location    String
+  userId      String
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  buildings Building[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("compounds")
+}
+
+model Building {
+  id           String   @id @default(uuid())
+  name         String
+  description  String
+  location     String
+  price        Float?
+  roomType     RoomType
+  totalBeds    Int
+  occupiedBeds Int      @default(0)
+
+  compoundId String
+  compound   Compound @relation(fields: [compoundId], references: [id], onDelete: Cascade)
+
+  properties Property[]
+  images     BuildingImage[]
+  features   BuildingFeature[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("buildings")
+}
+
+model Property {
+  id           String   @id @default(uuid())
+  name         String
+  description  String
+  price        Float
+  roomType     RoomType
+  phone        String
+  whatsapp     String
+  totalBeds    Int
+  occupiedBeds Int      @default(0)
+  travelTime   String
+
+  buildingId String
+  building   Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
+
+  universityId String?
+  university   University? @relation(fields: [universityId], references: [id])
+
+  reviews  Review[]
+  images   PropertyImage[]
+  features PropertyFeature[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("properties")
+}
+
+model Review {
+  id           String   @id @default(uuid())
+  authorName   String
+  authorAvatar String?
+  rating       Int
+  comment      String?
+  date         DateTime @default(now())
+  verifiedStay Boolean  @default(false)
+
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map("reviews")
+}
+
+model Feature {
+  id   String @id @default(uuid())
+  name String @unique
+
+  buildingFeatures BuildingFeature[]
+  propertyFeatures PropertyFeature[]
+}
+
+model BuildingFeature {
+  id String @id @default(uuid())
+
+  buildingId String
+  featureId  String
+
+  building Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
+  feature  Feature  @relation(fields: [featureId], references: [id])
+}
+
+model PropertyFeature {
+  id String @id @default(uuid())
+
+  propertyId String
+  featureId  String
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  feature  Feature  @relation(fields: [featureId], references: [id])
+}
+
+model BuildingImage {
+  id  String @id @default(uuid())
+  url String
+
+  buildingId String
+  building   Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
+}
+
+model PropertyImage {
+  id  String @id @default(uuid())
+  url String
+
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+}
+
+model ManagerAgent {
+  id          String @id @default(uuid())
+  role        Role
+  permissions Json
+
+  managerId String
+  manager   User   @relation("Manages", fields: [managerId], references: [id])
+
+  landlordId String
+  landlord   User   @relation("ManagedBy", fields: [landlordId], references: [id])
+
+  @@unique([managerId, landlordId])
+  @@map("manager_agents")
+}
+
+model OtpVerification {
+  id        String   @id @default(uuid())
+  code      String
+  expiresAt DateTime
+  verified  Boolean  @default(false)
+  attempts  Int      @default(0)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("otp_verifications")
+}
+
+enum Role {
+  STUDENT
+  LANDLORD
+  ADMIN
+  MANAGER
+  AGENT
+}
+
+enum UserStatus {
+  PENDING
+  ACTIVE
+  REJECTED
+  BANNED
+}
+
+enum AdminLevel {
+  SUPER
+  ASSISTANT
+}
+
+enum RoomType {
+  SINGLE
+  BEDSITTER
+  SELF_CONTAINED
+  SHARED
+  BANKERS
+}
